@@ -53,7 +53,7 @@ const Aadhaar = mongoose.model('Aadhaar', AadhaarSchema);
 // Session setup
 app.use(session({
     store: MongoStore.create({ mongoUrl: MURL }),
-    secret: 'your-secret-key',
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
