@@ -1,0 +1,217 @@
+#update_aadhaar.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Aadhaar</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f8ff; /* Light blue background */
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        h2 {
+            color: #333366; /* Dark blue for headings */
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 320px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        input, button, select {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        input:focus, select:focus {
+            border-color: #007BFF; /* Blue focus border */
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        button {
+            background-color: #ff5733; /* Red button background */
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ff4500; /* Darker red on hover */
+        }
+        label {
+            font-size: 14px;
+            color: #ff6347; /* Orange color for labels */
+        }
+        .address-container {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h2>Update Aadhaar</h2>
+    <form onsubmit="handleUpdateAadhaar(event)">
+        <label><input type="checkbox" id="updateImage"> Update Image</label>
+        <input type="file" id="image" accept="image/*" style="display:none;">
+        
+        <label><input type="checkbox" id="updateAddress"> Update Address</label>
+        <div class="address-container">
+            <input type="text" id="houseNo" placeholder="DNO/House No">
+            <input type="text" id="streetName" placeholder="Street Name/Area Name">
+            <input type="text" id="villageName" placeholder="Village Name/Locality Name">
+            <select id="state">
+                <option value="">Select State</option>
+                <!-- Options will be populated via JavaScript -->
+            </select>
+            <select id="district">
+                <option value="">Select District</option>
+                <!-- Options will be populated via JavaScript -->
+            </select>
+            <input type="text" id="pincode" placeholder="Pincode">
+        </div>
+        
+        <label><input type="checkbox" id="updatePhone"> Update Phone</label>
+        <input type="text" id="newPhone" placeholder="New Phone" style="display:none;">
+        
+        <label><input type="checkbox" id="updateEmail"> Update Email</label>
+        <input type="text" id="newEmail" placeholder="New Email" style="display:none;">
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // State and district data
+        const states = ["Andhra Pradesh", "Karnataka", "Maharashtra", "Tamil Nadu", "Telangana"];
+        const districts = {
+            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool"],
+            "Karnataka": ["Bengaluru", "Mysuru", "Mangaluru", "Hubballi", "Belagavi"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
+            "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Khammam", "Karimnagar"]
+        };
+
+        // Populate state options
+        const stateSelect = document.getElementById('state');
+        states.forEach(state => {
+            const option = document.createElement('option');
+            option.value = state;
+            option.textContent = state;
+            stateSelect.appendChild(option);
+        });
+
+        // Update districts based on selected state
+        stateSelect.addEventListener('change', function() {
+            const selectedState = this.value;
+            const districtSelect = document.getElementById('district');
+            districtSelect.innerHTML = '<option value="">Select District</option>'; // Clear previous options
+            
+            if (districts[selectedState]) {
+                districts[selectedState].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Toggle visibility of inputs based on checkboxes
+        document.getElementById('updateImage').addEventListener('change', function() {
+            document.getElementById('image').style.display = this.checked ? 'block' : 'none';
+        });
+
+        document.getElementById('updateAddress').addEventListener('change', function() {
+            document.querySelector('.address-container').style.display = this.checked ? 'block' : 'none';
+        });
+
+        document.getElementById('updatePhone').addEventListener('change', function() {
+            document.getElementById('newPhone').style.display = this.checked ? 'block' : 'none';
+        });
+
+        document.getElementById('updateEmail').addEventListener('change', function() {
+            document.getElementById('newEmail').style.display = this.checked ? 'block' : 'none';
+        });
+
+        function handleUpdateAadhaar(event) {
+        event.preventDefault();
+
+        let aadhaarDetails = {};
+
+        if (document.getElementById('updateImage').checked) {
+            const newImage = document.getElementById('image').files[0];
+            if (newImage) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    aadhaarDetails.photo = e.target.result;
+                    updateAadhaarOnServer(aadhaarDetails);
+                }
+                reader.readAsDataURL(newImage);
+            }
+        }
+
+        if (document.getElementById('updateAddress').checked) {
+            aadhaarDetails.address = {
+                houseNo: document.getElementById('houseNo').value,
+                streetName: document.getElementById('streetName').value,
+                villageName: document.getElementById('villageName').value,
+                district: document.getElementById('district').value,
+                state: document.getElementById('state').value,
+                pincode: document.getElementById('pincode').value
+            };
+        }
+
+        if (document.getElementById('updatePhone').checked) {
+            aadhaarDetails.phone = document.getElementById('newPhone').value;
+        }
+
+        if (document.getElementById('updateEmail').checked) {
+            aadhaarDetails.email = document.getElementById('newEmail').value;
+        }
+
+        // If no file is selected, just call the update function with the updated details
+        if (!document.getElementById('updateImage').checked) {
+            updateAadhaarOnServer(aadhaarDetails);
+        }
+    }
+
+    function updateAadhaarOnServer(details) {
+        fetch('/updateaadhaar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(details)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                window.location.href = 'view_aadhaar.html';
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+    </script>
+</body>
+</html>

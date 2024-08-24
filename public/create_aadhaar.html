@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AADHAAR APPLICATION FORM</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #e1f5fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f44336;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #2196f3;
+            border-bottom: 2px solid #ff9800;
+            padding-bottom: 5px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #333333;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="date"],
+        input[type="number"],
+        select,
+        input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        input[type="file"] {
+            border: none;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 12px;
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #f44336;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AADHAAR APPLICATION FORM</h1>
+        <form onsubmit="handleCreateAadhaar(event)">
+            <h3>Personal Details</h3>
+            <label for="firstName">First Name<span style="color: red;">*</span></label>
+            <input type="text" id="firstName" placeholder="First Name" required>
+
+            <label for="middleName">Middle Name</label>
+            <input type="text" id="middleName" placeholder="Middle Name">
+
+            <label for="lastName">Last Name<span style="color: red;">*</span></label>
+            <input type="text" id="lastName" placeholder="Last Name" required>
+
+            <label for="phone">Phone Number<span style="color: red;">*</span></label>
+            <input type="tel" id="phone" placeholder="Phone Number" pattern="[0-9]{10}" required>
+
+            <label for="email">Email ID<span style="color: red;">*</span></label>
+            <input type="email" id="email" placeholder="Email ID" required>
+
+            <label for="dob">Date of Birth<span style="color: red;">*</span></label>
+            <input type="date" id="dob" required>
+
+            <h3>Address Details</h3>
+            <label for="houseNo">DNO/House No.<span style="color: red;">*</span></label>
+            <input type="text" id="houseNo" placeholder="House Number" required>
+
+            <label for="streetName">Street Name/Area Name<span style="color: red;">*</span></label>
+            <input type="text" id="streetName" placeholder="Street Name or Area Name" required>
+
+            <label for="villageName">Village Name/Locality Name<span style="color: red;">*</span></label>
+            <input type="text" id="villageName" placeholder="Village or Locality Name" required>
+
+            <label for="state">State<span style="color: red;">*</span></label>
+            <select id="state" onchange="populateDistricts()" required>
+                <option value="" disabled selected>Select State</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+            </select>
+
+            <label for="district">District<span style="color: red;">*</span></label>
+            <select id="district" required>
+                <option value="" disabled selected>Select District</option>
+            </select>
+
+            <label for="pincode">Pincode<span style="color: red;">*</span></label>
+            <input type="number" id="pincode" placeholder="Pincode" pattern="[0-9]{6}" required>
+
+            <h3>Upload Photograph</h3>
+            <label for="photo">Passport Size Photo<span style="color: red;">*</span></label>
+            <input type="file" id="photo" accept="image/*" required>
+
+            <button type="submit">Submit Application</button>
+        </form>
+    </div>
+
+    <script>
+        const districtsByState = {
+            "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool"],
+            "Karnataka": ["Bengaluru", "Mysuru", "Mangaluru", "Hubballi", "Belagavi"],
+            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik", "Aurangabad"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Tiruchirappalli", "Salem"],
+            "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Khammam", "Karimnagar"]
+        };
+
+        function populateDistricts() {
+            const stateSelect = document.getElementById('state');
+            const districtSelect = document.getElementById('district');
+            const selectedState = stateSelect.value;
+
+            districtSelect.innerHTML = '<option value="" disabled selected>Select District</option>';
+
+            if (selectedState) {
+                const districts = districtsByState[selectedState];
+                districts.forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            }
+        }
+
+        function generateAadhaarNumber() {
+            const length = 12;
+            let aadhaarNumber = '';
+            for (let i = 0; i < length; i++) {
+                aadhaarNumber += Math.floor(Math.random() * 10);
+            }
+            return aadhaarNumber;
+        }
+
+        function handleCreateAadhaar(event) {
+        event.preventDefault();
+
+        const firstName = document.getElementById('firstName').value.trim();
+        const middleName = document.getElementById('middleName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const dob = document.getElementById('dob').value;
+        const houseNo = document.getElementById('houseNo').value.trim();
+        const streetName = document.getElementById('streetName').value.trim();
+        const villageName = document.getElementById('villageName').value.trim();
+        const district = document.getElementById('district').value.trim();
+        const pincode = document.getElementById('pincode').value.trim();
+        const state = document.getElementById('state').value.trim();
+        const photoInput = document.getElementById('photo');
+
+        if (photoInput.files.length === 0) {
+            alert('Please upload a passport size photo.');
+            return;
+        }
+
+        const photoFile = photoInput.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function () {
+            const photoDataURL = reader.result;
+
+            const aadhaarNumber = generateAadhaarNumber();
+
+            const aadhaarData = {
+                aadhaarNumber: aadhaarNumber,
+                firstName: firstName,
+                middleName: middleName,
+                lastName: lastName,
+                phone: phone,
+                email: email,
+                dob: dob,
+                address: {
+                    houseNo: houseNo,
+                    streetName: streetName,
+                    villageName: villageName,
+                    district: district,
+                    pincode: pincode,
+                    state: state
+                },
+                photo: photoDataURL
+            };
+
+            fetch('/createaadhaar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(aadhaarData)
+            })
+            .then(response => {
+                console.log(response);
+                if (!response.ok) {
+                    // If the response is not OK, throw an error with the status text
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json(); // Attempt to parse the JSON if the response is OK
+            })
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    alert(`Aadhaar Application Submitted Successfully!\nYour Aadhaar Number: ${aadhaarNumber}`);
+                    window.location.href = 'view_aadhaar.html'; // Redirect on success
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+
+        };
+
+        reader.readAsDataURL(photoFile);
+    }
+    </script>
+</body>
+</html>

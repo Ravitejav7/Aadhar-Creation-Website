@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Aadhaar Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #e1f5fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            display: flex;
+            overflow: hidden;
+        }
+
+        .photo-section {
+            background-color: lightblue; /* Blue shade */
+            width: 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .photo-section img {
+            max-width: 100%;
+            border-radius: 50%;
+            border: 2px solid #b9a588; /* Orange shade */
+        }
+
+        .details-section {
+            width: 75%;
+            padding: 30px;
+            background-color: steelblue; /* Red to Orange gradient */
+            color: #ffffff;
+        }
+
+        .details-section h1 {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: #ffffff; /* White */
+        }
+
+        .details-section p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .details-section p strong {
+            color: #333; /* Darker text color */
+        }
+
+        .aadhaar-number {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            background-color: #ffffff;
+            color: #f44336; /* Red shade */
+            padding: 10px;
+            border-radius: 5px;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="photo-section">
+            <img id="photo" alt="Passport Photo">
+        </div>
+        <div class="details-section">
+            <h1>Aadhaar Details</h1>
+            <p><strong>Full Name:</strong> <span id="fullName"></span></p>
+            <p><strong>Phone Number:</strong> <span id="phone"></span></p>
+            <p><strong>Email ID:</strong> <span id="email"></span></p>
+            <p><strong>Date of Birth:</strong> <span id="dob"></span></p>
+            <p><strong>Address:</strong></p>
+            <p id="address"></p>
+            <div class="aadhaar-number">
+                Aadhaar Number: <span id="aadhaarNumber"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadAadhaarData() {
+            fetch('/getaadhaar')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('aadhaarNumber').textContent = data.aadhaarNumber || 'N/A';
+                        document.getElementById('fullName').textContent = `${data.firstName || ''} ${data.middleName || ''} ${data.lastName || ''}`.trim();
+                        document.getElementById('phone').textContent = data.phone || 'N/A';
+                        document.getElementById('email').textContent = data.email || 'N/A';
+                        document.getElementById('dob').textContent = data.dob || 'N/A';
+
+                        const address = `${data.address?.houseNo || ''}, ${data.address?.streetName || ''}, ${data.address?.villageName || ''}, ${data.address?.district || ''} - ${data.address?.pincode || ''}, ${data.address?.state || ''}`;
+                        document.getElementById('address').textContent = address.trim();
+
+                        document.getElementById('photo').src = data.photo || 'default-image.jpg';
+                    } else {
+                        alert("No Aadhaar data found. Please submit the Aadhaar form first.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching Aadhaar data:', error);
+                    alert('An error occurred while fetching Aadhaar data.');
+                });
+        }
+
+        // Load Aadhaar data when the page loads
+        window.onload = loadAadhaarData;
+    </script>
+</body>
+</html>
+

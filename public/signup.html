@@ -1,0 +1,193 @@
+#signup.html
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('image copy.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        nav {
+            width: 100%;
+            background-color: transparent;
+            /* Remove background color */
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: none;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .home-container {
+            display: flex;
+            align-items: center;
+            color: #000000;
+            /* Black color for the text */
+            cursor: pointer;
+        }
+
+        .home-container .logo {
+            height: 40px;
+            width: 40px;
+            /* Set width */
+            border-radius: 50%;
+            /* Make it oval */
+            margin-right: 10px;
+            object-fit: cover;
+            /* Ensure image covers the area */
+        }
+
+        .home-container .home-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #000000;
+            /* Black color for the text */
+        }
+
+        h2 {
+            color: #343a40;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1.5em;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            margin-top: 80px;
+        }
+
+        input {
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid #ced4da;
+            font-size: 1em;
+            background-color: #f8f9fa;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #495057;
+            background-color: #ffffff;
+            outline: none;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 12px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 400px) {
+            form {
+                padding: 30px 20px;
+            }
+
+            button {
+                font-size: 0.9em;
+            }
+
+            input {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="home-container" onclick="location.href='index.html'">
+            <img src="logo.webp" class="logo" alt="Home Logo">
+            <span class="home-text">Home</span>
+        </div>
+    </nav>
+
+    <form onsubmit="handleSignup(event)">
+        <h2>Sign Up</h2>
+        <input type="text" id="name" placeholder="Name" required>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="New Password" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+        <button type="submit">Sign Up</button>
+    </form>
+    <script>
+        function handleSignup(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const username=document.getElementById('username').value;
+
+            localStorage.setItem('username',username);
+            localStorage.setItem('password', password);
+            console.log(username);
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            fetch("/signup", {
+                method: "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userid: username, password: password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/login'; // Redirect on success
+                    } else {
+                        alert(data.message); // Display error message
+                    }
+                })
+
+            // Add your code to store user details in the cloud database
+            // Redirect to Person Profile Page (PPP)
+            window.location.href = '/login';
+        }
+    </script>
+</body>
+
+</html>

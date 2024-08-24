@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Aadhaar Data</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #e0f7fa;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            text-align: center;
+            border-top: 5px solid #0288d1;
+        }
+        h1 {
+            color: #f44336; /* Red shade */
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        p {
+            color: #455a64; /* Blue grey shade */
+            font-size: 1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        button {
+            padding: 12px 25px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #d32f2f;
+            transform: translateY(-2px);
+        }
+        button:active {
+            background-color: #b71c1c;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Delete Aadhaar Data</h1>
+        <p>Are you sure you want to delete all Aadhaar-related data? This action cannot be undone.</p>
+        <button onclick="deleteAadhaarData()">Delete Data</button>
+    </div>
+
+    <script>
+        function deleteAadhaarData() {
+            if (confirm("Are you sure you want to delete all Aadhaar data? This action cannot be undone.")) {
+                fetch('/deleteaadhaar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include' // Ensure cookies are sent with the request
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Aadhaar data deleted successfully!");
+                        // Redirect to create_aadhaar.html
+                        window.location.href = 'create_aadhaar.html';
+                    } else {
+                        alert("Failed to delete Aadhaar data.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while deleting Aadhaar data.");
+                });
+            }
+        }
+    </script>
+</body>
+</html>

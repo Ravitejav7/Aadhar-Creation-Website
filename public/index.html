@@ -1,0 +1,281 @@
+#index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f4f8; /* Light background */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+        nav {
+            width: 100%;
+            background-color: #2196f3; /* Blue shade */
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        nav .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        nav .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 20px;
+            background-color: #f44336; /* Red shade */
+            transition: background-color 0.3s;
+        }
+        nav .nav-links a:hover {
+            background-color: #ff9800; /* Orange shade */
+        }
+        .content {
+            padding: 80px 20px 30px; /* Added top padding to account for fixed navbar */
+            text-align: center;
+            flex-grow: 1; /* Ensures content takes up available space */
+            background-color: #e0f7fa; /* Light blue background */
+        }
+        .content h1 {
+            color: #2196f3; /* Blue shade */
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #555;
+            animation: fadeIn 1.5s ease-in-out 0.5s;
+        }
+        .content img {
+            width: 50%;
+            max-width: 300px;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1.5s ease-in-out 1s;
+        }
+        .content .features {
+            margin-top: 40px;
+            text-align: left;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 25px 30px;
+            background-color: #ffffff; /* White background */
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: slideIn 1.5s ease-in-out;
+            background: linear-gradient(135deg, #e1f5fe, #e0f7fa, #e0f2f1);
+        }
+        .content .features h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #f44336; /* Red shade */
+        }
+        .content .features ul {
+            list-style-type: none;
+            padding: 0;
+            animation: fadeIn 1.5s ease-in-out 1.5s;
+        }
+        .content .features ul li {
+            margin: 15px 0;
+            font-size: 18px;
+            color: #333;
+            padding-left: 20px;
+            position: relative;
+        }
+        .content .features ul li:before {
+            content: '\2022'; /* Bullet point */
+            color: #2196f3; /* Blue shade */
+            font-weight: bold;
+            display: inline-block; 
+            width: 1em;
+            margin-left: -1em;
+        }
+        footer {
+            background-color: #1565C0; /* Darker Blue shade */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: auto;
+        }
+        footer p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        footer a {
+            color: #ff9800; /* Orange shade */
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        /* Additional CSS rules */
+    .content .features {
+        margin: 40px auto;
+        padding: 25px 30px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, #e1f5fe, #e0f7fa, #e0f2f1);
+    }
+    @media (max-width: 768px) {
+        .content .features {
+            margin-top: 20px;
+            padding: 15px;
+        }
+    }
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 768px) {
+            nav .logo {
+                font-size: 20px;
+            }
+            nav .nav-links a {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+            .content h1 {
+                font-size: 28px;
+            }
+            .content p {
+                font-size: 14px;
+            }
+            .content img {
+                width: 70%;
+            }
+            .content .features {
+                padding: 15px;
+            }
+            .content .features h2 {
+                font-size: 22px;
+            }
+            .content .features ul li {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">Aadhaar Portal</div>
+        <div class="nav-links">
+            <a href="/login" id="login-link">Login</a>
+            <a href="/signup" id="signup-link">Sign Up</a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="content">
+        <h1>Welcome to the Aadhaar Portal</h1>
+        <p>
+            Aadhaar is a 12-digit unique identity number issued to Indian residents by the Government of India. 
+            It is based on demographic and biometric data collected by the Unique Identification Authority of India (UIDAI). 
+            The Aadhaar number serves as proof of identity and address, anywhere in India.
+        </p>
+        <p>
+            Aadhaar was introduced in 2009, and since then, it has become one of the most important documents for residents of India. 
+            It helps in availing government subsidies, financial services, and serves as a digital identity.
+        </p>
+        <img src="https://cdn.iconscout.com/icon/free/png-256/free-aadhaar-2085055-1747945.png?f=webp" alt="Aadhaar Card">
+
+        <div class="features">
+            <h2>What You Can Do on This Portal</h2>
+            <ul>
+                <li><strong>Create Aadhaar Profile:</strong> Fill in your details to create an Aadhaar profile. Once submitted, the form will be locked.</li>
+                <li><strong>View Aadhaar Card:</strong> Retrieve and view your Aadhaar details in a card format, stored securely in our cloud database.</li>
+                <li><strong>Download Aadhaar Card:</strong> Download your Aadhaar card as a PDF or JPG file for your records.</li>
+                <li><strong>Update Aadhaar Information:</strong> Update specific details like your address or image. The changes will be reflected in your Aadhaar card.</li>
+                <li><strong>Delete Aadhaar Profile:</strong> Remove your Aadhaar profile entirely from the system, allowing you to create a new profile if needed.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Aadhaar Portal. All Rights Reserved.</p>
+        <p>Contact us: <a href="mailto:support@aadhaarportal.com">support@aadhaarportal.com</a></p>
+    </footer>
+
+    <script>
+        // Dynamic Navbar Background Color Change
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                navbar.style.backgroundColor = '#1565C0'; // Darker Blue shade
+            } else {
+                navbar.style.backgroundColor = '#2196f3'; // Original Blue shade
+            }
+        });
+
+        // Smooth Scrolling for Anchor Links (if needed)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            });
+        });
+
+        // Optional: Highlight the current section in the navigation bar
+        const sections = document.querySelectorAll('.content section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

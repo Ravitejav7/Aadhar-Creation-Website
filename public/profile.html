@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person Profile Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: #e9ecef;
+            overflow: hidden;
+        }
+
+        .nav-frame {
+            width: 25%;
+            background-color: #f8f9fa;
+            border-right: 2px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+        }
+
+        .nav-frame a {
+            text-decoration: none;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            margin: 15px 0;
+            width: 90%;
+            text-align: center;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+        }
+
+        .nav-frame a.disabled {
+            background-color: #9e9e9e;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .nav-frame a:hover:not(.disabled) {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .content-frame {
+            width: 75%;
+            background-color: #ffffff;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-top-left-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-frame">
+        <a id="createAadhaar" href="create_aadhaar.html" target="content-frame">Create Aadhaar Form</a>
+        <a id="viewAadhaar" href="view_aadhaar.html" target="content-frame">View Aadhaar Card</a>
+        <a id="updateAadhaar" href="update_aadhaar.html" target="content-frame">Update Aadhaar Form</a>
+        <a id="deleteAadhaar" href="delete_aadhaar.html" target="content-frame">Delete Aadhaar Profile</a>
+    </div>
+    <div class="content-frame">
+        <iframe name="content-frame"></iframe>
+    </div>
+
+    <script>
+        function updateNav() {
+            fetch('/getaadhaar')
+                .then(response => response.json())
+                .then(data => {
+                    const createAadhaarBtn = document.getElementById('createAadhaar');
+                    const viewAadhaarBtn = document.getElementById('viewAadhaar');
+                    const updateAadhaarBtn = document.getElementById('updateAadhaar');
+                    const deleteAadhaarBtn = document.getElementById('deleteAadhaar');
+                    const iframe = document.querySelector('iframe');
+
+                    if (data.success) {
+                        // If Aadhaar details exist
+                        createAadhaarBtn.classList.add('disabled');
+                        viewAadhaarBtn.classList.remove('disabled');
+                        updateAadhaarBtn.classList.remove('disabled');
+                        deleteAadhaarBtn.classList.remove('disabled');
+
+                        // Set default iframe src to "View Aadhaar Card"
+                        iframe.src = 'view_aadhaar.html';
+                    } else {
+                        // If Aadhaar details do not exist
+                        createAadhaarBtn.classList.remove('disabled');
+                        viewAadhaarBtn.classList.add('disabled');
+                        updateAadhaarBtn.classList.add('disabled');
+                        deleteAadhaarBtn.classList.add('disabled');
+
+                        // Set default iframe src to "Create Aadhaar Form"
+                        iframe.src = 'create_aadhaar.html';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching Aadhaar data:', error);
+                });
+        }
+
+        // Call updateNav() when the page loads
+        window.onload = function() {
+            updateNav();
+        };
+    </script>
+</body>
+</html>

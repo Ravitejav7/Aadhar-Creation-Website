@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: url('image.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+        }
+
+        nav {
+            width: 100%;
+            background-color: transparent; /* Remove background color */
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: none; /* Remove box shadow */
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .logo {
+            height: 40px;
+            width: 40px; /* Set width */
+            border-radius: 50%; /* Make it oval */
+            margin-right: 10px;
+            object-fit: cover; /* Ensure image covers the area */
+            cursor: pointer;
+        }
+
+        nav .home-text {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff; /* White color for the text */
+            cursor: pointer;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            margin-top: 120px;
+        }
+
+        input {
+            margin: 15px 0;
+            padding: 14px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            font-size: 1em;
+            background-color: #f8f9fa;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #495057;
+            background-color: #ffffff;
+            outline: none;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 14px;
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 400px) {
+            form {
+                padding: 30px 20px;
+            }
+
+            button {
+                font-size: 0.9em;
+            }
+
+            input {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <img src="logo.webp" class="logo" onclick="location.href='index.html'" alt="Home Logo">
+        <span class="home-text" onclick="location.href='index.html'">Home</span>
+    </nav>
+
+    <form id="loginForm">
+        <input type="text" id="username" name="username" placeholder="Username or Email" required>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+
+        window.addEventListener('load', () => {
+            const savedUsername = localStorage.getItem('username');
+            const savedPassword = localStorage.getItem('password');
+
+            if (savedUsername) {
+                document.getElementById('username').value = savedUsername;
+            }
+            if (savedPassword) {
+                document.getElementById('password').value = savedPassword;
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userid: username, password: password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/profile'; // Redirect on success
+                } else {
+                    alert(data.message); // Display error message
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+
+        });
+    </script>
+</body>
+</html>
